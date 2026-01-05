@@ -8,6 +8,10 @@ export default function AboutPage() {
     "Trading Certification",
     "Financial Analysis Expert",
     "15+ Years Experience",
+<<<<<<< HEAD
+=======
+    // djsnciundciun
+>>>>>>> 812be5e7ce5ea23a600fb8e7ea086bc566a2ec02
   ]
 
   return (
