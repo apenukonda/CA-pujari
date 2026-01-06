@@ -6,6 +6,7 @@ Handles user authentication and session management
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPBearer
 from typing import Dict, Any, Optional
+from app.core.firebase import revoke_refresh_tokens
 import logging
 
 from app.dependencies.auth import get_current_user, get_current_admin_user
@@ -32,9 +33,9 @@ async def get_current_user_info(
 
 @router.post("/logout")
 async def logout(current_user: Dict[str, Any] = Depends(get_current_user)):
-    """Logout user (revoke refresh tokens)"""
+    revoke_refresh_tokens(current_user["uid"])
     logger.info(f"User logged out: {current_user['uid']}")
-    return {"message": "Successfully logged out"}
+    return {"message": "Successfully logged out from all sessions"}
 
 
 @router.get("/verify")

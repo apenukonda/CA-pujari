@@ -71,25 +71,25 @@ async def get_current_user(
         AuthenticationError: If authentication fails
     """
     if not credentials:
-        raise AuthenticationError("No authentication credentials provided")
-    
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication required"
+        )
+
     try:
         # Verify Firebase token
         token_data = verify_firebase_token(credentials.credentials)
-        
-        # Extract user information
+
         uid = token_data.get("uid")
         email = token_data.get("email")
         role = token_data.get("role", "user")
         email_verified = token_data.get("email_verified", False)
-        
+
         if not uid:
             raise InvalidTokenError("Token missing user ID")
-        
-        # Get user record from Firebase Auth
+
         user_record = get_user_by_uid(uid)
-        
-        # Build user dictionary
+
         user = {
             "uid": uid,
             "email": email,
@@ -99,13 +99,21 @@ async def get_current_user(
             "tokens_valid_after": user_record.tokens_valid_after_timestamp,
             "firebase_user": user_record
         }
-        
+
         logger.info(f"User authenticated: {uid}")
         return user
-        
+
+    except InvalidTokenError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=str(e)
+        )
     except Exception as e:
         logger.error(f"Authentication failed: {e}")
-        raise AuthenticationError(f"Authentication failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token"
+        )
 
 
 async def get_current_active_user(
@@ -124,11 +132,11 @@ async def get_current_active_user(
         AuthenticationError: If user is inactive or disabled
     """
     if current_user.get("disabled"):
-        raise UserDisabledError("User account is disabled")
-    
-    # Check if user is inactive (this would be stored in Firestore)
-    # For now, we assume users are active unless disabled in Firebase
-    
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User account is disabled"
+        )
+
     return current_user
 
 
@@ -148,8 +156,11 @@ async def get_current_verified_user(
         AuthenticationError: If user email is not verified
     """
     if not current_user.get("email_verified"):
-        raise AuthenticationError("User email is not verified")
-    
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User email is not verified"
+        )
+
     return current_user
 
 
@@ -171,8 +182,11 @@ async def get_current_admin_user(
     role = current_user.get("role")
     if role != "admin":
         logger.warning(f"Admin access denied for user {current_user['uid']}")
-        raise AuthorizationError("Admin access required")
-    
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+
     return current_user
 
 
@@ -196,19 +210,18 @@ async def get_current_user_with_permissions(
     # Check if user has required permissions
     # This would be implemented based on your permission system
     user_role = current_user.get("role")
-    
+
     if user_role == "admin":
-        # Admin has all permissions
         return current_user
-    
-    # For regular users, check specific permissions
-    # This is a simplified implementation
+
     if "user" in required_permissions and user_role == "user":
         return current_user
-    
-    logger.warning(f"Permission denied for user {current_user['uid']}")
-    raise AuthorizationError("Insufficient permissions")
 
+    logger.warning(f"Permission denied for user {current_user['uid']}")
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Insufficient permissions"
+    )
 
 def require_auth(required: bool = True):
     """
@@ -225,15 +238,15 @@ def require_auth(required: bool = True):
     ) -> Optional[Dict[str, Any]]:
         if not required:
             return None
-        
+
         if not credentials:
-            raise AuthenticationError("Authentication required")
-        
-        try:
-            return await get_current_user(credentials)
-        except Exception as e:
-            raise AuthenticationError(f"Authentication failed: {str(e)}")
-    
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication required"
+            )
+
+        return await get_current_user(credentials)
+
     return auth_dependency
 
 
@@ -251,12 +264,15 @@ def require_role(required_role: str):
         current_user: Dict[str, Any] = Depends(get_current_active_user)
     ) -> Dict[str, Any]:
         user_role = current_user.get("role")
-        
+
         if user_role != required_role:
-            raise AuthorizationError(f"{required_role.capitalize()} role required")
-        
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"{required_role.capitalize()} role required"
+            )
+
         return current_user
-    
+
     return role_dependency
 
 

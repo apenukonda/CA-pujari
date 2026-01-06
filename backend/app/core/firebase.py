@@ -78,7 +78,7 @@ def verify_firebase_token(id_token: str) -> dict:
         Exception: If token verification fails
     """
     try:
-        decoded_token = auth.verify_id_token(id_token, app=get_firebase_app())
+        decoded_token = auth.verify_id_token(id_token, app=get_firebase_app(),check_revoked=True)
         logger.debug(f"Token verified for user: {decoded_token.get('uid')}")
         return decoded_token
     except Exception as e:
