@@ -7,7 +7,7 @@ import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "@/lib/firebase"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardAction } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
@@ -39,6 +39,11 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle>Welcome back</CardTitle>
           <CardDescription>Login to continue to your account</CardDescription>
+          <CardAction>
+            <Button variant="ghost" size="sm" onClick={() => router.back()}>
+              Back
+            </Button>
+          </CardAction>
         </CardHeader>
 
         <CardContent>

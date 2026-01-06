@@ -7,7 +7,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import { auth } from "@/lib/firebase"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardAction } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
@@ -15,6 +15,7 @@ export default function SignupPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const course = searchParams.get("course")
+   const redirectParam = searchParams.get("redirect")
 
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -42,10 +43,13 @@ export default function SignupPage() {
         })
       }
 
-      if (course) {
-        router.push(`/courses/${course}`)
-      } else {
-        router.push("/")
+        // 3️⃣ Redirect back (redirect param has priority)
+        if (redirectParam) {
+          router.push(redirectParam)
+        } else if (course) {
+          router.push(`/courses/${course}`)
+        } else {
+          router.push("/")
       }
     } catch (err: any) {
       setError(err.message)
@@ -60,6 +64,11 @@ export default function SignupPage() {
         <CardHeader>
           <CardTitle>Create Account</CardTitle>
           <CardDescription className="text-center">Start learning with an account</CardDescription>
+          <CardAction>
+            <Button variant="ghost" size="sm" onClick={() => router.back()}>
+              Back
+            </Button>
+          </CardAction>
         </CardHeader>
 
         <CardContent>
