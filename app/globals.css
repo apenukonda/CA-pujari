@@ -4,75 +4,76 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color palette for professional finance education brand */
-  --background: oklch(0.99 0.01 250);
-  --foreground: oklch(0.15 0.04 250);
-  --card: oklch(0.98 0.01 250);
-  --card-foreground: oklch(0.15 0.04 250);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.04 250);
-  --primary: oklch(0.25 0.15 250);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.45 0.08 85);
-  --secondary-foreground: oklch(0.15 0.04 250);
-  --muted: oklch(0.9 0.01 250);
-  --muted-foreground: oklch(0.5 0.02 250);
-  --accent: oklch(0.55 0.12 85);
-  --accent-foreground: oklch(0.99 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.01 250);
-  --input: oklch(0.92 0.01 250);
-  --ring: oklch(0.25 0.15 250);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  /* Finance-oriented palette (light mode) */
+  --background: #F2F3F4; /* Anti-Flash White */
+  --foreground: #062018; /* deep slate/green for text */
+  --card: #FFFFFF;
+  --card-foreground: #062018;
+  --popover: #F7FFFA;
+  --popover-foreground: #053127;
+  --primary: #006A4E; /* Bangladesh Green */
+  --primary-foreground: #F2F3F4;
+  --secondary: #1AB385; /* Mountain Meadow */
+  --secondary-foreground: #062018;
+  --muted: #E7F7EF; /* light mint */
+  --muted-foreground: #3A5A4A;
+  --accent: #00CC99; /* Caribbean Green */
+  --accent-foreground: #062018;
+  --destructive: #D9534F;
+  --destructive-foreground: #FFFFFF;
+  --border: #D6EDEA;
+  --input: #FFFFFF;
+  --ring: #2AAE8A;
+  --chart-1: #1AB385; /* mountain meadow */
+  --chart-2: #00CC99; /* caribbean */
+  --chart-3: #4F7942; /* frog */
+  --chart-4: #98FF98; /* mint */
+  --chart-5: #006A4E; /* bangladesh green */
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #F8FFFB;
+  --sidebar-foreground: #0B2F23;
+  --sidebar-primary: #0F6B56;
+  --sidebar-primary-foreground: #F8FFFB;
+  --sidebar-accent: #E7FFF2;
+  --sidebar-accent-foreground: #0B2F23;
+  --sidebar-border: #DCEFE6;
+  --sidebar-ring: #98E9C9;
 }
 
 .dark {
-  --background: oklch(0.12 0.02 250);
-  --foreground: oklch(0.95 0.01 250);
-  --card: oklch(0.18 0.03 250);
-  --card-foreground: oklch(0.95 0.01 250);
-  --popover: oklch(0.15 0.02 250);
-  --popover-foreground: oklch(0.95 0.01 250);
-  --primary: oklch(0.7 0.15 250);
-  --primary-foreground: oklch(0.12 0.02 250);
-  --secondary: oklch(0.65 0.12 85);
-  --secondary-foreground: oklch(0.12 0.02 250);
-  --muted: oklch(0.35 0.02 250);
-  --muted-foreground: oklch(0.65 0.02 250);
-  --accent: oklch(0.75 0.15 85);
-  --accent-foreground: oklch(0.12 0.02 250);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.25 0.02 250);
-  --input: oklch(0.25 0.02 250);
-  --ring: oklch(0.7 0.15 250);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+  /* Dark mode: muted greens + olive/gold complements for calm pairing with black */
+  --background: #061412; /* near-black with green undertone */
+  --foreground: #E9FFF6; /* soft pale text */
+  --card: #071F1B;
+  --card-foreground: #E9FFF6;
+  --popover: #082620;
+  --popover-foreground: #E9FFF6;
+  --primary: #1E8A5A; /* muted green */
+  --primary-foreground: #021614;
+  --secondary: #6B8B3D; /* olive green */
+  --secondary-foreground: #F4F7F5;
+  --muted: #0C2E27;
+  --muted-foreground: #9FE6CE; /* toned mint */
+  --accent: #A78F52; /* subdued gold/olive accent */
+  --accent-foreground: #061412;
+  --destructive: #D9534F;
+  --destructive-foreground: #FFFFFF;
+  --border: #0C3A33;
+  --input: #07221C;
+  --ring: #4FBF94;
+  --chart-1: #1E8A5A;
+  --chart-2: #00CC99;
+  --chart-3: #4F7942;
+  --chart-4: #9FB06A; /* muted olive/gold */
+  --chart-5: #7FAF92; /* subtle green */
+  --sidebar: #051916;
+  --sidebar-foreground: #E9FFF6;
+  --sidebar-primary: #1AB385;
+  --sidebar-primary-foreground: #E9FFF6;
+  --sidebar-accent: #071F1B;
+  --sidebar-accent-foreground: #E9FFF6;
+  --sidebar-border: #06322C;
+  --sidebar-ring: #63D3A8;
 }
 
 @theme inline {

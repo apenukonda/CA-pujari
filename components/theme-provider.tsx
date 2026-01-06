@@ -8,13 +8,7 @@ import {
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem={true}
-      storageKey="theme"
-      {...props}
-    >
+    <NextThemesProvider attribute="class" defaultTheme="system" {...props} enableSystem={true} storageKey="site-theme">
       {children}
     </NextThemesProvider>
   )
