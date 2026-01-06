@@ -9,7 +9,7 @@ export default function AboutPage() {
     "Financial Analysis Expert",
     "15+ Years Experience",
   ]
-  ]
+  
 
   return (
     <>
