@@ -1,14 +1,10 @@
-<<<<<<< HEAD
 "use client"
 
 import { useEffect, useState } from "react"
-=======
->>>>>>> 812be5e7ce5ea23a600fb8e7ea086bc566a2ec02
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import Link from "next/link"
 import { Star, Users, TrendingUp, ArrowRight } from "lucide-react"
-<<<<<<< HEAD
 import { motion } from "framer-motion"
 import { fadeUp, stagger } from "@/lib/animations"
 
@@ -27,25 +23,6 @@ export default function Home() {
     { icon: Users, stat: "5000+", label: "Students Trained" },
     { icon: TrendingUp, stat: "15+", label: "Years Experience" },
     { icon: Star, stat: "4.9/5", label: "Average Rating" },
-=======
-
-export default function Home() {
-  const highlights = [
-    {
-      icon: Users,
-      stat: "5000+",
-      label: "Students Trained",
-    },
-    {
-      icon: TrendingUp,
-      stat: "15+",
-      label: "Years Experience",
-    },
-    {
-      icon: Star,
-      stat: "4.9/5",
-      label: "Average Rating",
-    },
   ]
 
   const testimonials = [
@@ -70,14 +47,12 @@ export default function Home() {
         "Clear, structured, and focused on real-world applications. Shobha genuinely cares about her students' success.",
       initials: "AP",
     },
->>>>>>> 812be5e7ce5ea23a600fb8e7ea086bc566a2ec02
   ]
 
   return (
     <>
       <Navigation />
 
-<<<<<<< HEAD
       {/* HERO */}
       <section className="relative overflow-hidden py-20 md:py-32
         bg-gradient-to-br from-blue-50 via-background to-indigo-100
@@ -200,119 +175,6 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* WHY I TEACH */}
-      <section className="py-20 bg-background">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          className="max-w-3xl mx-auto text-center"
-        >
-          <h2 className="text-3xl font-bold mb-6">
-            Why I Teach Trading
-          </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            I’ve seen beginners lose money not because trading is difficult,
-            but because the basics were never explained properly.
-            My goal is to simplify learning, remove fear,
-            and help you trade with confidence.
-          </p>
-        </motion.div>
-      </section>
-
-      {/* CTA */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="py-20 bg-gradient-to-r from-primary to-accent text-white text-center"
-      >
-        <h2 className="text-4xl font-bold mb-6">
-          Let’s Build Your Trading Confidence
-        </h2>
-        <p className="text-lg opacity-90 mb-8">
-          Start learning today with structured, beginner-friendly guidance.
-        </p>
-        <Link
-          href="/courses"
-          className="inline-block px-10 py-4 bg-white text-primary rounded-xl
-          font-bold text-lg hover:scale-105 transition-transform"
-        >
-          Explore Courses →
-        </Link>
-      </motion.section>
-
-=======
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-32 bg-gradient-to-br from-background to-muted">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="mb-6 inline-block px-4 py-2 bg-accent/10 rounded-full">
-                <p className="text-accent text-sm font-semibold">Welcome to Trading Academy</p>
-              </div>
-              <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 text-balance">
-                Master Trading Basics
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 text-balance leading-relaxed">
-                Learn from a Chartered Accountant who makes trading simple. Perfect for complete beginners across India.
-              </p>
-              <div className="flex gap-4">
-                <Link
-                  href="/courses"
-                  className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity font-semibold flex items-center gap-2"
-                >
-                  View Courses <ArrowRight size={18} />
-                </Link>
-                <Link
-                  href="/webinars"
-                  className="px-8 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/5 transition-colors font-semibold"
-                >
-                  Upcoming Webinars
-                </Link>
-              </div>
-            </div>
-            <div className="relative h-96 bg-accent/20 rounded-2xl overflow-hidden">
-              <img src="/professional-woman-chartered-accountant-trading-ed.jpg" alt="Shobha Pujari" className="w-full h-full object-cover" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Mission Section */}
-      <section className="py-16 bg-background border-y border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Our Mission</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
-              Empowering beginners across India with practical trading knowledge, turning fear and confusion into
-              confidence and success.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Highlights Section */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {highlights.map((item, index) => {
-              const Icon = item.icon
-              return (
-                <div key={index} className="text-center p-8 rounded-xl bg-card border border-border">
-                  <div className="flex justify-center mb-4">
-                    <Icon className="text-accent" size={32} />
-                  </div>
-                  <div className="text-4xl font-bold text-primary mb-2">{item.stat}</div>
-                  <div className="text-muted-foreground font-medium">{item.label}</div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* Testimonials Section */}
       <section className="py-20 bg-muted">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -361,7 +223,6 @@ export default function Home() {
         </div>
       </section>
 
->>>>>>> 812be5e7ce5ea23a600fb8e7ea086bc566a2ec02
       <Footer />
     </>
   )

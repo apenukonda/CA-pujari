@@ -44,10 +44,7 @@
     "cmdk": "1.0.4",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
-<<<<<<< HEAD
     "framer-motion": "^12.23.27",
-=======
->>>>>>> 812be5e7ce5ea23a600fb8e7ea086bc566a2ec02
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "next": "16.0.10",
@@ -74,8 +71,4 @@
     "tw-animate-css": "1.3.3",
     "typescript": "^5"
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 812be5e7ce5ea23a600fb8e7ea086bc566a2ec02
