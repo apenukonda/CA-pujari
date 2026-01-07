@@ -32,9 +32,10 @@ export function Navigation() {
           {/* Logo */}
           <button
             onClick={() => router.push("/")}
-            className="font-bold text-2xl text-primary"
+            className="flex items-center gap-3"
+            aria-label="Home"
           >
-            Shobha Pujari
+            <img src="/faviconSP.png" alt="Shobha Pujari" className="h-10 w-auto" />
           </button>
 
           {/* Desktop Nav */}

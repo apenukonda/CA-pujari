@@ -1,13 +1,6 @@
-import dynamic from "next/dynamic"
-import React, { Suspense } from "react"
-
-const SignupClient = dynamic(() => import("./SignupClient"), { suspense: true })
+import React from "react"
+import SignupClient from "./SignupClient"
 
 export default function SignupPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
-      {/* Client-only signup form (uses useSearchParams) */}
-      <SignupClient />
-    </Suspense>
-  )
+  return <SignupClient />
 }

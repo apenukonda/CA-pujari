@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { Navigation } from "@/components/navigation"
-import { Footer } from "@/components/footer"
-import { Award, BookOpen, Users, Lightbulb } from "lucide-react"
-import { motion } from "framer-motion"
+import { Navigation } from "@/components/navigation";
+import { Footer } from "@/components/footer";
+import { Award, BookOpen, Users, Lightbulb } from "lucide-react";
+import { motion } from "framer-motion";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
-}
+};
 
 const stagger = {
   visible: {
@@ -16,32 +16,91 @@ const stagger = {
       staggerChildren: 0.15,
     },
   },
-}
+};
 
 export default function AboutPage() {
   return (
     <>
       <Navigation />
 
-      {/* HERO – PERSONAL BRAND INTRO */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-primary to-accent overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center px-6"
-        >
-          <p className="uppercase tracking-widest text-primary-foreground/70 mb-4">
-            Educator • CA • Trader
-          </p>
-          <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight text-primary-foreground">
-            Shobha Pujari
-          </h1>
-          <p className="mt-6 text-xl max-w-xl mx-auto text-primary-foreground/85">
-            Making trading understandable, practical, and human for beginners.
-          </p>
-        </motion.div>
-      </section>
+{/* HERO – PERSONAL BRAND INTRO */}
+<section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary to-accent">
+  {/* Animated background pulse */}
+  <motion.div
+    aria-hidden
+    className="absolute inset-0"
+    animate={{
+      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+    }}
+    transition={{
+      duration: 18,
+      repeat: Infinity,
+      ease: "linear",
+    }}
+    style={{
+      backgroundSize: "200% 200%",
+    }}
+  />
+
+  {/* Floating ambient blobs */}
+  <motion.div
+    className="absolute w-72 h-72 bg-white/10 rounded-full blur-3xl top-10 left-10"
+    animate={{ y: [0, 40, 0], x: [0, 20, 0] }}
+    transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+  />
+  <motion.div
+    className="absolute w-96 h-96 bg-black/10 rounded-full blur-3xl bottom-10 right-10"
+    animate={{ y: [0, -40, 0], x: [0, -20, 0] }}
+    transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+  />
+
+  {/* HERO CONTENT */}
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.9, ease: "easeOut" }}
+    className="relative z-10 text-center px-6 flex flex-col items-center"
+  >
+    {/* Role */}
+    <motion.p
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+      className="uppercase tracking-widest text-primary-foreground/70 mb-6"
+    >
+      Educator • CA • Trader
+    </motion.p>
+
+    {/* Name */}
+    <motion.h1
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.35 }}
+      className="text-6xl md:text-7xl font-extrabold tracking-tight text-primary-foreground"
+    >
+      Shobha Pujari
+    </motion.h1>
+
+    {/* Tagline */}
+    <motion.p
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.5 }}
+      className="mt-6 text-xl max-w-xl mx-auto text-primary-foreground/85"
+    >
+      Making trading understandable, practical, and human for beginners.
+    </motion.p>
+
+    {/* Scroll cue */}
+    <motion.div
+      className="mt-16 text-primary-foreground/70 text-sm"
+      animate={{ y: [0, 8, 0] }}
+      transition={{ duration: 2, repeat: Infinity }}
+    >
+      ↓ Scroll to explore
+    </motion.div>
+  </motion.div>
+</section>
 
       {/* STORY SECTION – NOT A BORING BIO */}
       <section className="py-28 bg-background">
@@ -57,12 +116,13 @@ export default function AboutPage() {
               I Didn’t Start as a Teacher.
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-5">
-              I started deep inside finance — audits, numbers, risk, regulations.
-              Fifteen years as a Chartered Accountant taught me how markets truly work.
+              I started deep inside finance — audits, numbers, risk,
+              regulations. Fifteen years as a Chartered Accountant taught me how
+              markets truly work.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              But beginners were struggling. So I shifted focus — not to predict markets,
-              but to **teach people how to think inside them**.
+              But beginners were struggling. So I shifted focus — not to predict
+              markets, but to **teach people how to think inside them**.
             </p>
           </motion.div>
 
@@ -157,7 +217,7 @@ export default function AboutPage() {
                 text: "You always know where you stand.",
               },
             ].map((item, i) => {
-              const Icon = item.icon
+              const Icon = item.icon;
               return (
                 <motion.div
                   key={i}
@@ -166,12 +226,10 @@ export default function AboutPage() {
                   className="rounded-3xl bg-card p-10 shadow-md hover:shadow-2xl transition"
                 >
                   <Icon className="text-accent mb-6" size={36} />
-                  <h3 className="text-2xl font-semibold mb-4">
-                    {item.title}
-                  </h3>
+                  <h3 className="text-2xl font-semibold mb-4">{item.title}</h3>
                   <p className="text-muted-foreground">{item.text}</p>
                 </motion.div>
-              )
+              );
             })}
           </div>
         </motion.div>
@@ -215,5 +273,5 @@ export default function AboutPage() {
 
       <Footer />
     </>
-  )
+  );
 }
