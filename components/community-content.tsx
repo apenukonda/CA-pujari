@@ -1,11 +1,15 @@
 "use client"
 
-import { Search, MessageSquare, Heart, Share2 } from "lucide-react"
+import { MessageSquare, Heart, Share2, Eye } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { auth } from "@/lib/firebase"
 
 export default function CommunityContent() {
+  const router = useRouter()
   const categories = ["Trading Basics", "Market Psychology", "Q&A", "Success Stories", "Technical Analysis"]
 
-  const posts = [
+  const initialPosts = [
     {
       id: 1,
       title: "How to Read Candlestick Charts Like a Pro",
@@ -39,136 +43,169 @@ export default function CommunityContent() {
       likes: 234,
       comments: 112,
     },
-    {
-      id: 4,
-      title: "Understanding Support and Resistance Levels",
-      excerpt:
-        "A comprehensive guide to identifying and using support and resistance levels in your technical analysis.",
-      category: "Technical Analysis",
-      author: "Shobha Pujari",
-      date: "January 2, 2026",
-      views: 1890,
-      likes: 145,
-      comments: 54,
-    },
-    {
-      id: 5,
-      title: "My First Trading Win: A Student Success Story",
-      excerpt: "How Rajesh transformed from a skeptical beginner to a confident trader in just 3 months.",
-      category: "Success Stories",
-      author: "Guest Contributor",
-      date: "December 28, 2025",
-      views: 2560,
-      likes: 198,
-      comments: 89,
-    },
-    {
-      id: 6,
-      title: "Q&A: What's the Best Time to Trade?",
-      excerpt: "Answers to the most common questions about market hours, session timings, and optimal trading times.",
-      category: "Q&A",
-      author: "Shobha Pujari",
-      date: "December 25, 2025",
-      views: 1450,
-      likes: 102,
-      comments: 78,
-    },
   ]
 
+  const [posts, setPosts] = useState(initialPosts)
+  const [showForm, setShowForm] = useState(false)
+  const [title, setTitle] = useState("")
+  const [category, setCategory] = useState(categories[0])
+  const [excerpt, setExcerpt] = useState("")
+
+  useEffect(() => {
+    auth.currentUser
+  }, [])
+
+  function requireAuthRedirect() {
+    if (!auth.currentUser) {
+      router.push(`/signup?redirect=/community`)
+      return false
+    }
+    return true
+  }
+
+  const handleNewPost = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!requireAuthRedirect()) return
+
+    const newPost = {
+      id: Date.now(),
+      title,
+      excerpt,
+      category,
+      author: auth.currentUser?.displayName || auth.currentUser?.email || "Member",
+      date: new Date().toLocaleDateString(),
+      views: 0,
+      likes: 0,
+      comments: 0,
+    }
+
+    setPosts((p) => [newPost, ...p])
+    setShowForm(false)
+    setTitle("")
+    setExcerpt("")
+    setCategory(categories[0])
+  }
+
   return (
-    <section className="py-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            {/* Search */}
-            <div className="mb-8">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search posts..."
-                  className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                <Search className="absolute right-3 top-3.5 text-muted-foreground" size={20} />
-              </div>
-            </div>
+    <section className="py-12 bg-background">
+      <div className="max-w-4xl mx-auto px-4">
 
-            {/* Categories */}
-            <div className="bg-card rounded-lg border border-border p-6">
-              <h3 className="font-bold text-foreground mb-4">Categories</h3>
-              <div className="space-y-2">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* Header */}
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl font-bold text-foreground">Community Hub</h1>
+          <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
+            Learn, share strategies, and grow together with traders worldwide.
+          </p>
+        </div>
 
-            {/* CTA */}
-            <div className="mt-8 bg-gradient-to-br from-primary to-accent p-6 rounded-lg text-primary-foreground">
-              <h3 className="font-bold mb-3">Join Our Community</h3>
-              <p className="text-sm mb-4 opacity-90">
-                Connect with traders, ask questions, and share your success stories.
-              </p>
-              <button className="w-full px-4 py-2 bg-primary-foreground text-primary rounded-lg hover:opacity-90 transition-opacity font-semibold text-sm">
-                Join Now
+        {/* Create Post CTA */}
+        <div className="mb-8 flex justify-center">
+          <button
+            onClick={() => {
+              if (!requireAuthRedirect()) return
+              setShowForm((s) => !s)
+            }}
+            className="px-6 py-2.5 rounded-full bg-primary text-primary-foreground font-semibold shadow-sm hover:opacity-95 transition"
+          >
+            {showForm ? "Cancel" : "Create New Post"}
+          </button>
+        </div>
+
+        {/* Post Form */}
+        {showForm && (
+          <form
+            onSubmit={handleNewPost}
+            className="mb-10 bg-card border border-border rounded-xl p-6 space-y-4"
+          >
+            <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              placeholder="Post title"
+              className="w-full px-4 py-2 rounded-md border border-border bg-background"
+            />
+
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full px-4 py-2 rounded-md border border-border bg-background"
+            >
+              {categories.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+
+            <textarea
+              value={excerpt}
+              onChange={(e) => setExcerpt(e.target.value)}
+              required
+              rows={4}
+              placeholder="Share your insight, question, or experience..."
+              className="w-full px-4 py-2 rounded-md border border-border bg-background resize-none"
+            />
+
+            <div className="text-right">
+              <button
+                type="submit"
+                className="px-5 py-2 rounded-md bg-primary text-primary-foreground font-semibold"
+              >
+                Publish
               </button>
             </div>
-          </div>
+          </form>
+        )}
 
-          {/* Posts */}
-          <div className="lg:col-span-3">
-            <div className="space-y-6">
-              {posts.map((post) => (
-                <article
-                  key={post.id}
-                  className="bg-card rounded-xl border border-border p-6 hover:shadow-lg transition-shadow"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <div className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full mb-3">
-                        {post.category}
-                      </div>
-                      <h2 className="text-2xl font-bold text-foreground mb-3">{post.title}</h2>
-                    </div>
+        {/* Feed */}
+        <div className="space-y-6">
+          {posts.map((post) => (
+            <article
+              key={post.id}
+              className="bg-card border border-border rounded-xl p-6 hover:shadow-md transition"
+            >
+              {/* Category */}
+              <span className="inline-block mb-3 text-xs font-semibold tracking-wide text-accent">
+                {post.category}
+              </span>
+
+              {/* Title */}
+              <h2 className="text-xl font-bold text-foreground mb-2">
+                {post.title}
+              </h2>
+
+              {/* Excerpt */}
+              <p className="text-muted-foreground mb-5 leading-relaxed">
+                {post.excerpt}
+              </p>
+
+              {/* Meta */}
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <div>
+                  <span className="font-medium">{post.author}</span>
+                  <span className="mx-2">•</span>
+                  <span>{post.date}</span>
+                </div>
+
+                {/* Metrics */}
+                <div className="flex items-center gap-5">
+                  <div className="flex items-center gap-1">
+                    <Eye size={16} />
+                    <span>{post.views}</span>
                   </div>
-
-                  <p className="text-muted-foreground mb-4 leading-relaxed">{post.excerpt}</p>
-
-                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                    <div className="flex gap-4">
-                      <span>By {post.author}</span>
-                      <span>{post.date}</span>
-                    </div>
-                    <span>{post.views} views</span>
+                  <div className="flex items-center gap-1">
+                    <Heart size={16} />
+                    <span>{post.likes}</span>
                   </div>
-
-                  <div className="border-t border-border pt-4 flex items-center justify-between">
-                    <div className="flex gap-6">
-                      <button className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                        <Heart size={18} />
-                        <span className="text-sm">{post.likes}</span>
-                      </button>
-                      <button className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                        <MessageSquare size={18} />
-                        <span className="text-sm">{post.comments}</span>
-                      </button>
-                      <button className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                        <Share2 size={18} />
-                      </button>
-                    </div>
-                    <button className="px-6 py-2 text-primary font-semibold hover:bg-primary/5 rounded-lg transition-colors">
-                      Read More
-                    </button>
+                  <div className="flex items-center gap-1">
+                    <MessageSquare size={16} />
+                    <span>{post.comments}</span>
                   </div>
-                </article>
-              ))}
-            </div>
-          </div>
+                  <button className="font-semibold hover:text-primary transition">
+                    Read →
+                  </button>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

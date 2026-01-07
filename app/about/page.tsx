@@ -1,136 +1,216 @@
+"use client"
+
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { Award, BookOpen, Users, Lightbulb } from "lucide-react"
+import { motion } from "framer-motion"
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0 },
+}
+
+const stagger = {
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+}
 
 export default function AboutPage() {
-  const credentials = [
-    "Chartered Accountant (CA)",
-    "Trading Certification",
-    "Financial Analysis Expert",
-    "15+ Years Experience",
-  ]
-  
-
   return (
     <>
       <Navigation />
 
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-r from-primary to-accent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-4">About Shobha Pujari</h1>
-          <p className="text-xl text-primary-foreground/90 max-w-2xl mx-auto">
-            Chartered Accountant & Trading Educator dedicated to demystifying financial markets for beginners
+      {/* HERO – PERSONAL BRAND INTRO */}
+      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-primary to-accent overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center px-6"
+        >
+          <p className="uppercase tracking-widest text-primary-foreground/70 mb-4">
+            Educator • CA • Trader
           </p>
-        </div>
+          <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight text-primary-foreground">
+            Shobha Pujari
+          </h1>
+          <p className="mt-6 text-xl max-w-xl mx-auto text-primary-foreground/85">
+            Making trading understandable, practical, and human for beginners.
+          </p>
+        </motion.div>
       </section>
 
-      {/* Profile Section */}
-      <section className="py-16 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-6">Professional Journey</h2>
-              <p className="text-muted-foreground mb-4 leading-relaxed">
-                With over 15 years of experience as a Chartered Accountant, I've developed a deep understanding of
-                financial markets and trading mechanics. My journey started as a financial professional, but I realized
-                there was a massive gap in beginner-friendly trading education.
-              </p>
-              <p className="text-muted-foreground mb-4 leading-relaxed">
-                This realization drove me to transition my career towards teaching. Today, I've trained over 5,000
-                students across India, helping them transform from confused beginners to confident traders.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                My teaching philosophy is simple: break down complex concepts into digestible lessons, provide
-                real-world examples, and always prioritize practical knowledge over theory.
-              </p>
-            </div>
-            <div className="relative h-96 bg-accent/20 rounded-2xl overflow-hidden">
-              <img
-                src="/professional-woman-chartered-accountant-trading-ed.jpg"
-                alt="Shobha Pujari"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
+      {/* STORY SECTION – NOT A BORING BIO */}
+      <section className="py-28 bg-background">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center"
+        >
+          <motion.div variants={fadeUp}>
+            <h2 className="text-4xl font-bold mb-6">
+              I Didn’t Start as a Teacher.
+            </h2>
+            <p className="text-muted-foreground leading-relaxed mb-5">
+              I started deep inside finance — audits, numbers, risk, regulations.
+              Fifteen years as a Chartered Accountant taught me how markets truly work.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              But beginners were struggling. So I shifted focus — not to predict markets,
+              but to **teach people how to think inside them**.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp}
+            whileHover={{ scale: 1.03 }}
+            className="relative"
+          >
+            <div className="absolute inset-0 bg-accent/20 blur-2xl rounded-3xl" />
+            <img
+              src="/professional-woman-chartered-accountant-trading-ed.jpg"
+              alt="Shobha Pujari"
+              className="relative rounded-3xl object-cover h-[420px] w-full"
+            />
+          </motion.div>
+        </motion.div>
       </section>
 
-      {/* Credentials */}
-      <section className="py-16 bg-muted">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Qualifications & Achievements</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {credentials.map((credential, index) => (
-              <div key={index} className="bg-background p-6 rounded-lg border border-border text-center">
-                <Award className="text-accent mx-auto mb-3" size={32} />
-                <p className="font-semibold text-foreground">{credential}</p>
-              </div>
+      {/* CREDENTIALS – FLOATING CARDS */}
+      <section className="py-24 bg-muted">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={stagger}
+          className="max-w-6xl mx-auto px-6"
+        >
+          <motion.h2
+            variants={fadeUp}
+            className="text-4xl font-bold text-center mb-16"
+          >
+            Built on Real Credibility
+          </motion.h2>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              "Chartered Accountant (CA)",
+              "Trading Certification",
+              "15+ Years Experience",
+              "5,000+ Students Trained",
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                whileHover={{ y: -10 }}
+                className="rounded-2xl bg-background p-8 text-center shadow-sm hover:shadow-xl transition"
+              >
+                <Award className="mx-auto mb-5 text-accent" size={34} />
+                <p className="font-semibold">{item}</p>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      {/* Teaching Philosophy */}
-      <section className="py-16 bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Teaching Philosophy</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* TEACHING STYLE – GEN Z FRIENDLY */}
+      <section className="py-28 bg-background">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="max-w-6xl mx-auto px-6"
+        >
+          <motion.h2
+            variants={fadeUp}
+            className="text-4xl font-bold text-center mb-20"
+          >
+            How I Teach Differently
+          </motion.h2>
+
+          <div className="grid md:grid-cols-2 gap-10">
             {[
               {
                 icon: Lightbulb,
-                title: "Simplicity First",
-                description: "Complex concepts broken down into simple, actionable steps anyone can understand.",
+                title: "No Overcomplication",
+                text: "Clear frameworks instead of confusing indicators.",
               },
               {
                 icon: BookOpen,
-                title: "Practical Learning",
-                description: "Real-world examples and live market analysis instead of theoretical knowledge.",
+                title: "Market Reality",
+                text: "Live charts, real mistakes, real learning.",
               },
               {
                 icon: Users,
-                title: "Community Support",
-                description: "Learning is better together. Strong community for peer support and knowledge sharing.",
+                title: "Community First",
+                text: "Trading feels lonely. Learning shouldn’t.",
               },
               {
                 icon: Award,
-                title: "Accountability",
-                description: "Transparent tracking of progress with regular feedback and personalized guidance.",
+                title: "Progress Tracking",
+                text: "You always know where you stand.",
               },
-            ].map((item, index) => {
+            ].map((item, i) => {
               const Icon = item.icon
               return (
-                <div key={index} className="bg-card p-8 rounded-lg border border-border">
-                  <Icon className="text-accent mb-4" size={32} />
-                  <h3 className="text-xl font-bold text-foreground mb-3">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
-                </div>
+                <motion.div
+                  key={i}
+                  variants={fadeUp}
+                  whileHover={{ scale: 1.04 }}
+                  className="rounded-3xl bg-card p-10 shadow-md hover:shadow-2xl transition"
+                >
+                  <Icon className="text-accent mb-6" size={36} />
+                  <h3 className="text-2xl font-semibold mb-4">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground">{item.text}</p>
+                </motion.div>
               )
             })}
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      {/* Why Trust */}
-      <section className="py-16 bg-muted">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Why Beginners Trust Me</h2>
+      {/* TRUST – SOCIAL PROOF FEEL */}
+      <section className="py-24 bg-muted">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={stagger}
+          className="max-w-4xl mx-auto px-6"
+        >
+          <motion.h2
+            variants={fadeUp}
+            className="text-4xl font-bold text-center mb-14"
+          >
+            Why Beginners Stay
+          </motion.h2>
+
           <div className="space-y-6">
             {[
-              "15+ years of professional experience in finance and trading",
-              "Trained 5,000+ students with a 4.9/5 average rating",
-              "CA qualification ensures deep understanding of financial regulations and accounting",
-              "Beginner-focused approach - no jargon, only practical knowledge",
-              "Live webinars and interactive Q&A sessions for real support",
-              "Lifetime access to course materials and continuous updates",
-            ].map((reason, index) => (
-              <div key={index} className="flex gap-4 p-4 bg-background rounded-lg border border-border">
-                <div className="text-primary text-2xl font-bold">✓</div>
-                <p className="text-foreground leading-relaxed">{reason}</p>
-              </div>
+              "Beginner-first explanations",
+              "Live doubt clearing, not just videos",
+              "No fake profit screenshots",
+              "CA-backed financial discipline",
+              "Lifetime access & updates",
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                className="bg-background rounded-xl p-6 shadow-sm"
+              >
+                ✓ {item}
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       <Footer />

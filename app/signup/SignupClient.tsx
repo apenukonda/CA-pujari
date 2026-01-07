@@ -6,9 +6,17 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import { auth } from "@/lib/firebase"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardAction } from "@/components/ui/card"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardAction,
+} from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { motion } from "framer-motion"
 
 export default function SignupClient() {
   const router = useRouter()
@@ -57,95 +65,151 @@ export default function SignupClient() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Create Account</CardTitle>
-          <CardDescription className="text-center">Start learning with an account</CardDescription>
-          <CardAction>
-            <Button variant="ghost" size="sm" onClick={() => router.back()}>
-              Back
-            </Button>
-          </CardAction>
-        </CardHeader>
+    <div
+      className="min-h-screen flex items-center justify-center px-4
+      bg-gradient-to-br from-background via-muted to-background"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 30, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-md"
+      >
+        <Card className="relative overflow-hidden rounded-3xl shadow-2xl">
+          {/* subtle glow */}
+          <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
 
-        <CardContent>
-          <form onSubmit={handleSignup} className="flex flex-col gap-3">
-            {error && <p className="text-sm text-red-500 text-center">{error}</p>}
-
-            <div className="flex items-center gap-3">
-              <Avatar>
-                <AvatarFallback>{name ? name.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="text-sm font-semibold">Create your account</p>
-                <p className="text-xs text-muted-foreground">Join 5000+ students and start learning</p>
-              </div>
-            </div>
-
-            <Input
-              type="text"
-              placeholder="Full name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-
-            <div className="flex gap-2">
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="flex-1"
-              />
-              <Button type="button" variant="ghost" size="sm" onClick={() => setShowPassword((s) => !s)}>
-                {showPassword ? 'Hide' : 'Show'}
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-2xl font-extrabold">
+              Create your account
+            </CardTitle>
+            <CardDescription className="text-center">
+              Start learning with structure and confidence
+            </CardDescription>
+            <CardAction>
+              <Button variant="ghost" size="sm" onClick={() => router.back()}>
+                Back
               </Button>
-            </div>
+            </CardAction>
+          </CardHeader>
 
-            <label className="flex items-center gap-2">
-              <Checkbox checked={agree} onCheckedChange={(v) => setAgree(Boolean(v))} />
-              <span className="text-sm">I agree to the Terms of Service</span>
-            </label>
+          <CardContent>
+            <form onSubmit={handleSignup} className="flex flex-col gap-5">
+              {error && (
+                <p className="text-sm text-red-500 text-center">{error}</p>
+              )}
 
-            <Button type="submit" disabled={loading || !agree} className="w-full">
-              {loading ? "Creating account..." : "Sign Up"}
-            </Button>
+              {/* PROFILE PREVIEW */}
+              <div className="flex items-center gap-4 rounded-xl bg-muted/50 p-4">
+                <Avatar>
+                  <AvatarFallback className="font-bold">
+                    {name ? name.charAt(0).toUpperCase() : "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm font-semibold">
+                    Create your account
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Join 5,000+ learners and grow confidently
+                  </p>
+                </div>
+              </div>
 
-            <div className="flex items-center gap-3">
-              <div className="h-px flex-1 bg-border" />
-              <span className="text-xs text-muted-foreground">Or continue with</span>
-              <div className="h-px flex-1 bg-border" />
-            </div>
+              {/* NAME */}
+              <Input
+                type="text"
+                placeholder="Full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
 
-            <div className="flex gap-2">
-              <Button variant="outline" className="flex-1">Google</Button>
-              <Button variant="outline" className="flex-1">GitHub</Button>
-            </div>
+              {/* EMAIL */}
+              <Input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
 
-            <p className="text-center text-sm text-muted-foreground">
-              Already have an account?{' '}
-              <button
-                type="button"
-                onClick={() => router.push(course ? `/login?course=${course}` : "/login")}
-                className="text-primary font-medium underline"
+              {/* PASSWORD */}
+              <div className="flex gap-2">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowPassword((s) => !s)}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </Button>
+              </div>
+
+              {/* TERMS */}
+              <label className="flex items-center gap-2 cursor-pointer">
+                <Checkbox
+                  checked={agree}
+                  onCheckedChange={(v) => setAgree(Boolean(v))}
+                />
+                <span className="text-sm">
+                  I agree to the Terms of Service
+                </span>
+              </label>
+
+              {/* SUBMIT */}
+              <Button
+                type="submit"
+                disabled={loading || !agree}
+                className="w-full py-6 text-base"
               >
-                Login
-              </button>
-            </p>
-          </form>
-        </CardContent>
-      </Card>
+                {loading ? "Creating account..." : "Create Account"}
+              </Button>
+
+              {/* DIVIDER */}
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-border" />
+                <span className="text-xs text-muted-foreground">
+                  Or continue with
+                </span>
+                <div className="h-px flex-1 bg-border" />
+              </div>
+
+              {/* OAUTH */}
+              <div className="flex gap-3">
+                <Button variant="outline" className="flex-1">
+                  Google
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  GitHub
+                </Button>
+              </div>
+
+              {/* LOGIN LINK */}
+              <p className="text-center text-sm text-muted-foreground">
+                Already have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() =>
+                    router.push(course ? `/login?course=${course}` : "/login")
+                  }
+                  className="text-primary font-medium underline"
+                >
+                  Login
+                </button>
+              </p>
+            </form>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   )
 }
