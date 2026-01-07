@@ -51,18 +51,22 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Right */}
+          {/* Right (desktop) */}
           <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
           </div>
 
-          {/* Mobile */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile controls: show theme toggle and menu button */}
+          <div className="flex md:hidden items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {isOpen && (
