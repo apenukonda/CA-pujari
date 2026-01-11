@@ -21,7 +21,8 @@ from google.cloud.firestore import SERVER_TIMESTAMP, Increment
 from google.api_core import exceptions as gcp_exceptions
 
 from app.utils.logging_utils import get_logger
-from app.utils.firestore_optimization import get_firestore_client
+from app.core.firebase import get_firestore_client
+
 
 logger = get_logger(__name__)
 

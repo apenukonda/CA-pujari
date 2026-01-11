@@ -19,26 +19,24 @@ _firestore_client: Optional[FirestoreClient] = None
 
 
 def initialize_firebase() -> firebase_admin.App:
-    """Initialize Firebase Admin SDK"""
     global _firebase_app
-    
+
     if _firebase_app is not None:
         return _firebase_app
-    
+
     try:
-        # Initialize Firebase app with service account credentials
-        cred = credentials.Certificate(settings.get_firebase_credentials())
+        cred = credentials.Certificate("credentials/firebase_service_account.json")
         _firebase_app = firebase_admin.initialize_app(
-            credential=cred,
-            name="e-learning-platform"
+            credential=cred
         )
-        
+
         logger.info("Firebase Admin SDK initialized successfully")
         return _firebase_app
-        
+
     except Exception as e:
         logger.error(f"Failed to initialize Firebase: {e}")
         raise
+
 
 
 def get_firebase_app() -> firebase_admin.App:

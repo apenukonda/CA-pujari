@@ -12,6 +12,9 @@ import logging
 # Import configuration and logging setup
 from app.core.config import settings
 from app.core.logging import setup_logging
+from app.core.firebase import get_firestore_client
+from datetime import datetime
+
 
 # Import route modules
 from app.routes import auth_routes
@@ -27,7 +30,7 @@ from app.routes import admin_routes
 from app.webhooks import payment_webhook
 
 # Import rate limiter
-from app.utils.rate_limiter import RateLimiterMiddleware
+#from app.utils.rate_limiter import RateLimiterMiddleware
 
 # Setup logging
 setup_logging()
@@ -151,6 +154,42 @@ async def global_exception_handler(request: Request, exc: Exception):
         "error": "Internal server error",
         "detail": "An unexpected error occurred"
     }
+
+@app.post("/test-add-user")
+async def test_add_user():
+    db = get_firestore_client()
+
+    user_data = {
+        "name": "Amaan",
+        "email": "amaan@test.com",
+        "role": "admin",
+        "created_at": datetime.utcnow()
+    }
+
+    doc_ref = db.collection("users").add(user_data)
+
+    return {
+        "message": "User added successfully",
+        "doc_id": doc_ref[1].id
+    }
+
+
+@app.get("/test-get-users")
+async def test_get_users():
+    db = get_firestore_client()
+    users_ref = db.collection("users").stream()
+
+    users = []
+    for doc in users_ref:
+        data = doc.to_dict()
+        data["id"] = doc.id
+        users.append(data)
+
+    return {
+        "count": len(users),
+        "users": users
+    }
+
 
 if __name__ == "__main__":
     uvicorn.run(
