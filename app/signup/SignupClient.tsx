@@ -4,6 +4,8 @@ import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import { auth } from "@/lib/firebase"
+import { addDoc, collection, serverTimestamp } from "firebase/firestore"
+import { db } from "@/lib/firebase"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -48,6 +50,21 @@ export default function SignupClient() {
         await updateProfile(userCredential.user, {
           displayName: name,
         })
+        // record registration if a course was in the URL
+        if (course) {
+          try {
+            await addDoc(collection(db, "registrations"), {
+              type: "course",
+              itemId: course,
+              userId: userCredential.user.uid,
+              userEmail: userCredential.user.email || null,
+              createdAt: serverTimestamp(),
+            })
+          } catch (err) {
+            // non-fatal, continue
+            console.error("Failed to record registration", err)
+          }
+        }
       }
 
       if (redirectParam) {

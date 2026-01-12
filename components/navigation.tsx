@@ -53,6 +53,12 @@ export function Navigation() {
 
           {/* Right (desktop) */}
           <div className="hidden md:flex items-center gap-4">
+            <button
+              onClick={() => router.push('/login')}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold"
+            >
+              Login
+            </button>
             <ThemeToggle />
           </div>
 
@@ -71,6 +77,17 @@ export function Navigation() {
 
         {isOpen && (
           <div className="md:hidden pb-4 space-y-2">
+            <div className="px-4">
+              <button
+                onClick={() => {
+                  router.push('/login')
+                  setIsOpen(false)
+                }}
+                className="w-full text-center px-4 py-2 bg-primary text-primary-foreground rounded-lg font-semibold mb-2"
+              >
+                Login
+              </button>
+            </div>
             {navItems.map((item) => (
               <button
                 key={item.href}
