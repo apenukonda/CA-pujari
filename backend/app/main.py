@@ -8,13 +8,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 import uvicorn
 import logging
+from datetime import datetime
+
+from firebase_admin import auth
 
 # Import configuration and logging setup
 from app.core.config import settings
 from app.core.logging import setup_logging
 from app.core.firebase import get_firestore_client
-from datetime import datetime
-
 
 # Import route modules
 from app.routes import auth_routes
@@ -28,9 +29,6 @@ from app.routes import admin_routes
 
 # Import webhook handlers
 from app.webhooks import payment_webhook
-
-# Import rate limiter
-#from app.utils.rate_limiter import RateLimiterMiddleware
 
 # Setup logging
 setup_logging()
@@ -48,32 +46,33 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=["*"],  # for dev
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Add trusted host middleware for security
+# Add trusted host middleware
 app.add_middleware(
     TrustedHostMiddleware,
     allowed_hosts=settings.ALLOWED_HOSTS
 )
 
-# Health check endpoint
+# ========================
+# HEALTH + ROOT
+# ========================
+
 @app.get("/health")
 async def health_check():
-    """Health check endpoint for monitoring"""
     return {
         "status": "healthy",
         "service": "e-learning-backend",
         "version": "1.0.0"
     }
 
-# Root endpoint
+
 @app.get("/")
 async def root():
-    """Root endpoint with API information"""
     return {
         "message": "E-Learning Platform API",
         "version": "1.0.0",
@@ -81,96 +80,87 @@ async def root():
         "health": "/health"
     }
 
-# Register API routes
-# Authentication routes
-app.include_router(
-    auth_routes.router,
-    prefix="/api/v1/auth",
-    tags=["Authentication"]
-)
+# ========================
+# REGISTER ROUTES
+# ========================
 
-# User management routes
-app.include_router(
-    user_routes.router,
-    prefix="/api/v1/users",
-    tags=["Users"]
-)
+app.include_router(auth_routes.router, prefix="/api/v1/auth", tags=["Authentication"])
+app.include_router(user_routes.router, prefix="/api/v1/users", tags=["Users"])
+app.include_router(course_routes.router, prefix="/api/v1/courses", tags=["Courses"])
+app.include_router(webinar_routes.router, prefix="/api/v1/webinars", tags=["Webinars"])
+app.include_router(purchase_routes.router, prefix="/api/v1/purchases", tags=["Purchases"])
+app.include_router(feedback_routes.router, prefix="/api/v1/feedback", tags=["Feedback"])
+app.include_router(doubt_routes.router, prefix="/api/v1/doubts", tags=["Doubts"])
+app.include_router(admin_routes.router, prefix="/api/v1/admin", tags=["Admin"])
+app.include_router(payment_webhook.router, prefix="/webhooks", tags=["Webhooks"])
 
-# Course management routes
-app.include_router(
-    course_routes.router,
-    prefix="/api/v1/courses",
-    tags=["Courses"]
-)
+# ========================
+# TEST / DEV ENDPOINTS
+# ========================
 
-# Webinar management routes
-app.include_router(
-    webinar_routes.router,
-    prefix="/api/v1/webinars",
-    tags=["Webinars"]
-)
-
-# Purchase and payment routes
-app.include_router(
-    purchase_routes.router,
-    prefix="/api/v1/purchases",
-    tags=["Purchases"]
-)
-
-# Feedback routes
-app.include_router(
-    feedback_routes.router,
-    prefix="/api/v1/feedback",
-    tags=["Feedback"]
-)
-
-# Doubt/Q&A routes
-app.include_router(
-    doubt_routes.router,
-    prefix="/api/v1/doubts",
-    tags=["Doubts"]
-)
-
-# Admin routes
-app.include_router(
-    admin_routes.router,
-    prefix="/api/v1/admin",
-    tags=["Admin"]
-)
-
-# Webhook routes
-app.include_router(
-    payment_webhook.router,
-    prefix="/webhooks",
-    tags=["Webhooks"]
-)
-
-# Global exception handler
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    """Global exception handler for unhandled errors"""
-    logger.error(f"Unhandled exception: {exc}", exc_info=True)
-    return {
-        "error": "Internal server error",
-        "detail": "An unexpected error occurred"
-    }
-
-@app.post("/test-add-user")
-async def test_add_user():
+@app.post("/test-add-admin-user")
+async def test_add_admin_user():
     db = get_firestore_client()
 
+    email = "amaan@test.com"
+    password = "Test@12345"
+    name = "Amaan"
+
+    # 1. Create user in Firebase Auth
+    user_record = auth.create_user(
+        email=email,
+        password=password,
+        display_name=name
+    )
+
+    # 2. Set custom claim as admin 🔥
+    auth.set_custom_user_claims(user_record.uid, {"role": "admin"})
+
+    # 3. Save profile in Firestore
     user_data = {
-        "name": "Amaan",
-        "email": "amaan@test.com",
+        "name": name,
+        "email": email,
         "role": "admin",
-        "created_at": datetime.utcnow()
+        "created_at": datetime.utcnow(),
+        "firebase_uid": user_record.uid
     }
 
-    doc_ref = db.collection("users").add(user_data)
+    db.collection("users").document(user_record.uid).set(user_data)
 
     return {
-        "message": "User added successfully",
-        "doc_id": doc_ref[1].id
+        "message": "Admin user created successfully",
+        "firebase_uid": user_record.uid
+    }
+
+
+@app.post("/test-add-normal-user")
+async def test_add_normal_user():
+    db = get_firestore_client()
+
+    email = "user1@test.com"
+    password = "User@12345"
+    name = "Normal User"
+
+    user_record = auth.create_user(
+        email=email,
+        password=password,
+        display_name=name
+    )
+
+    # normal user → no custom claims
+    user_data = {
+        "name": name,
+        "email": email,
+        "role": "user",
+        "created_at": datetime.utcnow(),
+        "firebase_uid": user_record.uid
+    }
+
+    db.collection("users").document(user_record.uid).set(user_data)
+
+    return {
+        "message": "Normal user created successfully",
+        "firebase_uid": user_record.uid
     }
 
 
@@ -188,6 +178,19 @@ async def test_get_users():
     return {
         "count": len(users),
         "users": users
+    }
+
+
+# ========================
+# GLOBAL ERROR HANDLER
+# ========================
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Unhandled exception: {exc}", exc_info=True)
+    return {
+        "error": "Internal server error",
+        "detail": "An unexpected error occurred"
     }
 
 
